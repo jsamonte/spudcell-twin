@@ -9,11 +9,37 @@
     "pLD3": 0.56,
     "pLD1": 0.52
   },
+  "n_plasmids": 7,
   "n_cells": 95,
+  "generations": 5,
+  "mean_retention": 0.6143,
   "p_all_seven_if_independent": 0.031806,
   "p_all_seven_observed": 0.3,
   "ratio_observed_over_independent": 9.432,
   "retention_needed_for_independence": 0.842,
   "expected_complete_cells": 3.02,
-  "observed_complete_cells": 28.5
+  "observed_complete_cells": 28,
+  "binomial_p_value": 1.355275928063125e-19,
+  "observed_rate": 0.2947,
+  "observed_rate_ci95": [
+    0.2056,
+    0.3971
+  ],
+  "copies_at_load": 2.65,
+  "single_division_by_copy_number": {
+    "1": 0.007812,
+    "2": 0.133484,
+    "3": 0.392696,
+    "4": 0.636501,
+    "5": 0.800722
+  },
+  "five_generations_by_copy_number": {
+    "1": 0.0,
+    "2": 4.2e-05,
+    "3": 0.009339,
+    "4": 0.104471,
+    "5": 0.329162
+  },
+  "per_generation_target": 0.786,
+  "copies_needed_for_observed": 5
 }

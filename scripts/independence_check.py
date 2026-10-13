@@ -14,10 +14,20 @@ inside a cell, and it needs no model of division at all.
 """
 
 import json
+import sys
 from pathlib import Path
 
+from scipy import stats
+
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from src.inheritance import complete_set_probability  # noqa: E402
+
 RESULTS = ROOT / "results"
+
+GENERATIONS = 5            # Fig. 3; Methods 11
+COPIES_AT_LOAD = 2.65      # 2.5 nM x 1.06 copies/nM, Methods 3 + Table S8
 
 # Fig. 3p / Fig. S33, after 5 generations, n = 95 single cells.
 # aHL is stated numerically in SI section 6 ("71% cells analyzed"); the rest are
@@ -61,21 +71,79 @@ def main():
 
     # Expected count of complete cells under independence, out of 95.
     expected = product * N_CELLS
-    observed = OBSERVED_COMPLETE * N_CELLS
+    observed_n = round(OBSERVED_COMPLETE * N_CELLS)
     print(f"\n  out of {N_CELLS} single cells: independence predicts "
-          f"{expected:.1f} complete, {observed:.0f} were seen")
+          f"{expected:.1f} complete, {observed_n} were seen")
+
+    # Is that gap bigger than sampling noise? The counts are the only thing
+    # that can carry a p-value here: 95 cells, each complete or not, against
+    # the rate independence predicts.
+    # One-sided, because the question is whether fidelity EXCEEDS what chance
+    # allows. The interval is taken two-sided, so it reports the uncertainty on
+    # the observed rate rather than a bound implied by the test direction.
+    test = stats.binomtest(observed_n, N_CELLS, product, alternative="greater")
+    ci = stats.binomtest(observed_n, N_CELLS, product).proportion_ci(
+        confidence_level=0.95)
+    print(f"\n  binomial test, {observed_n}/{N_CELLS} against p={product:.4f}:")
+    print(f"    p-value = {test.pvalue:.3e}")
+    print(f"    observed rate {observed_n / N_CELLS:.1%} "
+          f"(95% CI {ci.low:.1%}-{ci.high:.1%}) vs predicted {product:.1%}")
+
+    # One physical explanation needs no correlation at all: more than one copy
+    # of each plasmid at the moment of division. Phi29 replicates continuously
+    # with no checkpoint, so copy number at division is NOT the ~2.7 copies
+    # loaded at t=0. How many copies would independent partitioning need?
+    print("\n  if instead each plasmid were present in c copies at division,")
+    print("  independent partitioning alone would give:")
+    single = {}
+    for c in (1, 2, 3, 4, 5):
+        p1 = complete_set_probability(7, copy_number=c)
+        single[c] = p1
+        print(f"    c={c}  single division {p1:.4f}   "
+              f"over {GENERATIONS} generations {p1 ** GENERATIONS:.4f}")
+
+    # Copies needed so that surviving 5 independent divisions gives 30%.
+    per_gen_target = OBSERVED_COMPLETE ** (1 / GENERATIONS)
+    copies_needed = None
+    c = 1.0
+    while c < 60:
+        if complete_set_probability(7, copy_number=int(round(c))) >= per_gen_target:
+            copies_needed = int(round(c))
+            break
+        c += 1
+    print(f"\n  to reach {OBSERVED_COMPLETE:.0%} after {GENERATIONS} generations a cell "
+          f"needs {per_gen_target:.1%} per division,")
+    print(f"  which independent partitioning reaches at c = {copies_needed} copies "
+          f"(vs {COPIES_AT_LOAD:.1f} loaded at t=0)")
+    print("\n  So the gap does NOT prove correlated partitioning: continuous")
+    print("  replication to ~2x the loaded copy number would also explain it.")
+    print("  Distinguishing the two needs per-cell copy number at division,")
+    print("  which the preprint does not report. See docs/PARAMETERS.md.")
 
     RESULTS.mkdir(parents=True, exist_ok=True)
     (RESULTS / "independence_check.json").write_text(json.dumps({
         "source": "Gaut et al. 2026, bioRxiv 2026.07.01.735724, Fig. 3o and 3p",
         "retention": RETENTION,
+        "n_plasmids": 7,
         "n_cells": N_CELLS,
+        "generations": GENERATIONS,
+        "mean_retention": round(sum(RETENTION.values()) / 7, 4),
         "p_all_seven_if_independent": round(product, 6),
         "p_all_seven_observed": OBSERVED_COMPLETE,
         "ratio_observed_over_independent": round(ratio, 3),
         "retention_needed_for_independence": round(q_needed, 4),
         "expected_complete_cells": round(expected, 2),
-        "observed_complete_cells": round(observed, 1),
+        "observed_complete_cells": observed_n,
+        "binomial_p_value": float(test.pvalue),
+        "observed_rate": round(observed_n / N_CELLS, 4),
+        "observed_rate_ci95": [round(ci.low, 4), round(ci.high, 4)],
+        "copies_at_load": COPIES_AT_LOAD,
+        "single_division_by_copy_number": {
+            str(c): round(p, 6) for c, p in single.items()},
+        "five_generations_by_copy_number": {
+            str(c): round(p ** GENERATIONS, 6) for c, p in single.items()},
+        "per_generation_target": round(per_gen_target, 4),
+        "copies_needed_for_observed": copies_needed,
     }, indent=2) + "\n")
     print("\nWrote results/independence_check.json")
 
