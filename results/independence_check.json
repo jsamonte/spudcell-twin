@@ -1,0 +1,19 @@
+{
+  "source": "Gaut et al. 2026, bioRxiv 2026.07.01.735724, Fig. 3o and 3p",
+  "retention": {
+    "aHL": 0.71,
+    "T7RNAP": 0.68,
+    "GFP": 0.63,
+    "pREP": 0.63,
+    "pLD2": 0.57,
+    "pLD3": 0.56,
+    "pLD1": 0.52
+  },
+  "n_cells": 95,
+  "p_all_seven_if_independent": 0.031806,
+  "p_all_seven_observed": 0.3,
+  "ratio_observed_over_independent": 9.432,
+  "retention_needed_for_independence": 0.842,
+  "expected_complete_cells": 3.02,
+  "observed_complete_cells": 28.5
+}

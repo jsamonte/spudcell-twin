@@ -1,0 +1,63 @@
+{
+  "n_plasmids": 7,
+  "plasmids": [
+    {
+      "name": "aHL",
+      "kbp": 4.3,
+      "retention": 0.71,
+      "needed": true
+    },
+    {
+      "name": "T7RNAP",
+      "kbp": 5.4,
+      "retention": 0.68,
+      "needed": true
+    },
+    {
+      "name": "GFP",
+      "kbp": 2.5,
+      "retention": 0.63,
+      "needed": false
+    },
+    {
+      "name": "pREP",
+      "kbp": 4.6,
+      "retention": 0.63,
+      "needed": true
+    },
+    {
+      "name": "pLD2",
+      "kbp": 20.0,
+      "retention": 0.57,
+      "needed": false
+    },
+    {
+      "name": "pLD3",
+      "kbp": 23.4,
+      "retention": 0.56,
+      "needed": false
+    },
+    {
+      "name": "pLD1",
+      "kbp": 30.1,
+      "retention": 0.52,
+      "needed": false
+    }
+  ],
+  "retention_vs_size": {
+    "spearman_rho": -0.7928,
+    "spearman_p": 0.0334,
+    "pearson_r": -0.8937,
+    "pearson_p": 0.0067
+  },
+  "retention_vs_necessity": {
+    "point_biserial_r": 0.8119,
+    "p": 0.0266
+  },
+  "size_vs_necessity_confound": {
+    "spearman_rho": -0.433,
+    "p": 0.3318
+  },
+  "conclusion": "Both size and functional necessity correlate with retention, but they are collinear in this dataset (the three largest plasmids are the three the authors call dispensable), so the published data cannot distinguish a physical from a selective mechanism. GFP, the smallest plasmid, is retained worse than two larger ones, so size alone is insufficient.",
+  "source": "sizes Table S6; retention Fig. 3p and SI section 6; necessity assignment from the authors' argument in SI section 7"
+}
