@@ -1,21 +1,27 @@
-<!-- UNWRITTEN -->
+<!-- DRAFT -->
 
-DELETE THE LINE ABOVE once you have written this section.
-While it is there the build substitutes an outline and warns you.
-
-# Abstract - Project 5 - plasmid inheritance in a synthetic cell
-
-**Length:** 150-250 words. Written LAST, after the other two.
-
-**What this section does:** Context in one sentence. What you did in two. The headline number. What it means. No citations, no hedging words you would not defend out loud.
-
-
-
-**The one-sentence claim the whole paper defends:**
-> Measured genome fidelity is 9.4x higher than independent partitioning allows, computed from two of the source paper's own numbers with nothing fitted.
-
-**Do not:** Do not pick a mechanism. The paper's strength is that it assumes nothing - keep it.
-
----
-
-Write below this line. Delete everything above it when you are done.
+Synthetic cells assembled from purified components divide without segregation
+machinery, so their contents are distributed to daughters by chance. For a
+single plasmid in many copies this is well understood and tolerable, but a
+genome carried on several *distinct* plasmids requires every type to be
+inherited at once, and the joint case has not been analysed. Gaut et al.
+(2026) report a synthetic cell whose genome is split across seven plasmids,
+together with both the per-plasmid retention rates after five generations
+(71, 68, 63, 63, 57, 56, 52%) and the fraction of daughters holding the
+complete genome (30%). Those two measurements are sufficient to test
+independence, and we show they are inconsistent with it. If the seven
+plasmids were inherited independently, the probability of a complete set
+would be the product of the individual rates, **3.2%**; the measured figure
+is **30%**, a factor of **9.4**. Of 95 single cells, independence predicts 3
+complete genomes and 28 were observed (one-sided exact binomial
+p = 1.3 × 10⁻¹⁹). For independence to hold, every plasmid would require a
+retention rate of 84.2%, against a measured mean of 61.4%. The comparison
+uses no fitted parameters. Two explanations remain consistent with the
+published data — continuous replication raising copy number at division, or
+selection against cells that lose a functionally required plasmid — and the
+per-plasmid retention ordering cannot distinguish them, correlating with both
+plasmid size and functional necessity at n = 7. We therefore report the
+discrepancy and the measurement that would resolve it, rather than a
+mechanism. The result also bears on the authors' claim that distributing a
+genome across plasmids limits the influence of stochastic partitioning: for
+complete-set inheritance, independent partitioning implies the opposite.
