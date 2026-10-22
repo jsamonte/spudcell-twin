@@ -262,6 +262,14 @@ These are properties of the source measurements, not of the calculation, and non
 
 5. **The source is a preprint** and not yet peer reviewed. It also contains an internal inconsistency — seven plasmids in Results, Fig. 3o and Table S6, but "eight" on p. 5. Table S6 lists seven and their sizes sum to the stated 90.3 kbp, so seven is used throughout.
 
+## 6. Data and code availability
+
+No new data were generated. Every input is a published measurement taken from Gaut et al. (2026), cited to the figure, table or methods section it came from in `docs/PARAMETERS.md`.
+
+All analysis code is in the repository accompanying this manuscript. `scripts/independence_check.py` reproduces the headline comparison, `scripts/retention_structure.py` the correlation analysis, and `scripts/make_figures.py` redraws Figure 1 from the same results file the text is generated from, so figure and text cannot disagree. The closed-form inheritance model is in `src/inheritance.py` and is covered by unit tests.
+
+> **>>> BEFORE POSTING: make the repository public and put its URL here. <<<** This section promises code a reader can run. A private repository makes that promise false, and a dead link in a preprint is worse than no link.
+
 ## References
 
 1. Gaut NJ, Deich C, Cash B, Hoog T, Engelhart AE, Adamala KP. *A Chemically Defined Synthetic Cell Capable Of Growth And Replication.* bioRxiv 2026.07.01.735724 (2026). doi:10.64898/2026.07.01.735724

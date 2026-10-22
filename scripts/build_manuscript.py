@@ -365,6 +365,27 @@ def main():
       "their sizes sum to the stated 90.3 kbp, so seven is used throughout.")
     w("")
 
+    # --------------------------------------------- data and code availability
+    w("## 6. Data and code availability")
+    w("")
+    w("No new data were generated. Every input is a published measurement "
+      "taken from Gaut et al. (2026), cited to the figure, table or methods "
+      "section it came from in `docs/PARAMETERS.md`.")
+    w("")
+    w("All analysis code is in the repository accompanying this manuscript. "
+      "`scripts/independence_check.py` reproduces the headline comparison, "
+      "`scripts/retention_structure.py` the correlation analysis, and "
+      "`scripts/make_figures.py` redraws Figure 1 from the same results file "
+      "the text is generated from, so figure and text cannot disagree. The "
+      "closed-form inheritance model is in `src/inheritance.py` and is "
+      "covered by unit tests.")
+    w("")
+    w("> **>>> BEFORE POSTING: make the repository public and put its URL "
+      "here. <<<** This section promises code a reader can run. A private "
+      "repository makes that promise false, and a dead link in a preprint is "
+      "worse than no link.")
+    w("")
+
     # ------------------------------------------------------------- references
     w("## References")
     w("")
