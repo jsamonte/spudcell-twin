@@ -251,3 +251,7 @@ __pycache__/
 
 # Raw stochastic trajectories; summaries in results/ are committed
 trajectories/
+
+# built by scripts/build_pdf.py
+paper/manuscript.pdf
+paper/_manuscript_render.html

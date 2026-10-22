@@ -193,6 +193,32 @@ def main():
     w("")
     w("### 3.1 Independent partitioning underpredicts fidelity ninefold")
     w("")
+
+    # The figure carries the whole argument, so it leads the results rather
+    # than trailing them. Drawn by scripts/make_figures.py from the same
+    # results file these numbers come from, so the two cannot disagree.
+    figure = PAPER / "figures" / "fig1_independence.png"
+    if figure.exists():
+        w("![](figures/fig1_independence.png)")
+        w("")
+        w(f"**Figure 1. Measured genome fidelity exceeds independent "
+          f"partitioning by {ind['ratio_observed_over_independent']:.1f}×.** "
+          f"(**A**) Per-plasmid retention after {gens} generations, from "
+          f"Fig. 3p of the source. The dashed line marks "
+          f"{pct(ind['retention_needed_for_independence'])}, the rate every "
+          f"plasmid would need for independent partitioning to account for "
+          f"the observed complete-genome fraction; no plasmid reaches it. "
+          f"(**B**) The product of the seven rates, "
+          f"{pct(p_ind)}, against the measured "
+          f"{pct(p_obs)} (Fig. 3o). Of {n} single cells, independence "
+          f"predicts {ind['expected_complete_cells']:.0f} complete genomes "
+          f"and {ind['observed_complete_cells']} were observed. No parameter "
+          f"is fitted: panel B is the product of panel A.")
+        w("")
+    else:
+        w("*(Figure 1 missing — run `scripts/make_figures.py`.)*")
+        w("")
+
     w("| | |")
     w("|---|---|")
     w(f"| Mean per-plasmid retention | {pct(ind['mean_retention'])} |")
@@ -356,7 +382,7 @@ def main():
 
     authored = [s for s in ("abstract", "introduction", "discussion")
                 if (PAPER / "sections" / f"{s}.md").exists()
-                and s not in _unwritten]
+                and s not in _unwritten and s not in _drafted]
     print(f"wrote {out.relative_to(ROOT)}  ({len(L)} lines)")
     print(f"author-written sections present: {authored or 'none yet'}")
     print("outlines are placeholders; write paper/sections/*.md and re-run")

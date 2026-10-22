@@ -125,6 +125,10 @@ A cell carrying *c* copies of each plasmid at division misses a given plasmid on
 
 ### 3.1 Independent partitioning underpredicts fidelity ninefold
 
+![](figures/fig1_independence.png)
+
+**Figure 1. Measured genome fidelity exceeds independent partitioning by 9.4×.** (**A**) Per-plasmid retention after 5 generations, from Fig. 3p of the source. The dashed line marks 84.2%, the rate every plasmid would need for independent partitioning to account for the observed complete-genome fraction; no plasmid reaches it. (**B**) The product of the seven rates, 3.2%, against the measured 30.0% (Fig. 3o). Of 95 single cells, independence predicts 3 complete genomes and 28 were observed. No parameter is fitted: panel B is the product of panel A.
+
 | | |
 |---|---|
 | Mean per-plasmid retention | 61.4% |
