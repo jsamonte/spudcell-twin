@@ -389,10 +389,15 @@ def main():
       "closed-form inheritance model is in `src/inheritance.py` and is "
       "covered by unit tests.")
     w("")
-    w("> **>>> BEFORE POSTING: make the repository public and put its URL "
-      "here. <<<** This section promises code a reader can run. A private "
-      "repository makes that promise false, and a dead link in a preprint is "
-      "worse than no link.")
+    # The repository is private while the manuscript circulates privately, so
+    # this says so rather than printing a URL that would not resolve. The
+    # reminder to make it public and paste the URL lives in paper/README.md,
+    # where it cannot block build_pdf.py: a >>> instruction in the text stops
+    # the PDF rendering, which is right before posting and wrong before a
+    # private read.
+    w("The repository is currently private. It will be made public, and its "
+      "URL given here, when this manuscript is posted; in the meantime the "
+      "code is available from the author on request.")
     w("")
 
     # ------------------------------------------------------------- references

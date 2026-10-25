@@ -38,3 +38,23 @@ source's own measurements multiplied together. That is the paper's strength
 and it should survive rewriting. Resist the temptation to claim the gap proves
 correlated partitioning: §3.2 shows copy number explains it equally well, and
 the data cannot choose.
+
+## Before posting as a preprint
+
+The data-availability section currently says the repository is private and the
+code is available on request. That is true while the manuscript circulates
+privately, and it builds a clean PDF.
+
+**When you post, three things change:**
+
+1. Make `jsamonte/spudcell-twin` public on GitHub.
+2. In `scripts/build_manuscript.py`, replace the "currently private" sentence
+   in section 6 with the repository URL.
+3. Rebuild and re-render.
+
+This reminder lives here rather than in the manuscript because a `>>>`
+instruction in the text blocks `build_pdf.py` entirely — which is correct
+before posting and wrong before a private read.
+
+Note that making the repository public exposes the full commit history,
+including the author email addresses in it.
