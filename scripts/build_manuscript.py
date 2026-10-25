@@ -21,6 +21,15 @@ CITE = ("Gaut NJ, Deich C, Cash B, Hoog T, Engelhart AE, Adamala KP. "
         "Replication.* bioRxiv 2026.07.01.735724 (2026). "
         "doi:10.64898/2026.07.01.735724")
 
+#: Cited in the introduction for the classical single-plasmid result - random
+#: partitioning suffices when the cargo is many small identical molecules.
+#: Verified against Crossref 2026-10-21; author list and article number are as
+#: Crossref returned them, not recalled.
+OLIVI = ("Olivi L, Berger M, Creyghton RNP, De Franceschi N, Dekker C, "
+         "Mulder BM, Claassens NJ, ten Wolde PR, van der Oost J. "
+         "*Towards a synthetic cell cycle.* Nature Communications 12, 4531 "
+         "(2021). doi:10.1038/s41467-021-24772-8")
+
 
 def load(name):
     path = RESULTS / name
@@ -390,6 +399,8 @@ def main():
     w("## References")
     w("")
     w(f"1. {CITE}")
+    w("")
+    w(f"2. {OLIVI}")
     w("")
     w("*Reproduce every number above with "
       "`.venv\\Scripts\\python scripts\\independence_check.py` and "

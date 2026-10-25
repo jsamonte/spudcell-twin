@@ -36,10 +36,8 @@ complete-set inheritance, independent partitioning implies the opposite.
 
 ## 1. Introduction
 
-<!-- DRAFT -->
-
 A cell that divides must give each daughter a complete copy of its genome.
-Bacteria achieve this with dedicated machinery; synthetic cells assembled from
+Bacteria achieve this with dedicated machinery. By contrast, synthetic cells assembled from
 purified components generally have none, and must rely on the contents of the
 parent being distributed by chance. How well that works sets a ceiling on how
 many generations such a system can run.
@@ -68,25 +66,12 @@ but concerns copy number of a single type; natural multipartite genomes, such
 as that of *Vibrio cholerae*, maintain their replicons with active
 segregation systems rather than by chance.
 
-> **>>> ADD ANY PRIOR WORK YOU HAVE READ, IN YOUR OWN WORDS <<<**
->
-> I verified: Olivi L, Berger M, Creyghton R, De Franceschi N, Dekker C,
-> Mulder B, Claassens N, ten Wolde P, van der Oost J. *Towards a synthetic
-> cell cycle.* Nature Communications 12, 4531 (2021).
-> doi:10.1038/s41467-021-24772-8 — checked against Crossref.
->
-> I searched the plasmid-segregation and synthetic-cell literature and found
-> nothing modelling joint retention of several distinct replicons. That search
-> was not exhaustive: no theses, no paywalled work. Write "to our knowledge",
-> never "none exists".
-
 Gaut et al. (2026) report a synthetic cell whose 90 kbp genome is carried on
 seven plasmids, which feeds, grows, replicates its DNA and divides, and which
 sustains five generations with 30% of daughters retaining the complete genome
 despite having no segregation machinery. They also report the per-plasmid
 retention rates. Those two measurements are sufficient, on their own, to test
-whether the plasmids are inherited independently — a test the paper does not
-perform. We perform it here.
+whether the plasmids are inherited independently, a test the paper does not perform. We perform it here.
 
 ## 2. Methods
 
@@ -184,69 +169,53 @@ With n = 7 the two predictors cannot be separated: the three largest plasmids ar
 
 ## 4. Discussion
 
-<!-- DRAFT -->
-
-The calculation above is almost embarrassingly simple, and that is its point.
+The calculation above is almost shockingly simple, and that is its point.
 Seven measured retention rates, multiplied together, give 3.2%. The measured
 figure is 30%. Nothing is fitted, nothing is simulated, and no parameter is
-estimated — so there is no model to attack, only an arithmetic consequence of
+estimated. Therefore, there is no model to attack but only an arithmetic consequence of
 two numbers the source paper already reports.
 
-What the gap means is less simple. A factor of 9.4 is not a discrepancy to be
-explained away by measurement error: for independent partitioning to hold,
-every one of the seven plasmids would have to be retained at 84.2%, against a
+However, what the gap means is less simple. A factor of 9.4 is not a discrepancy to be explained away by measurement error, because for independent partitioning to hold, every one of the seven plasmids would have to be retained at 84.2%, against a
 measured mean of 61.4% and a measured best of 71%. Something is making
 complete genomes commoner than chance allows.
 
-Two explanations survive, and we cannot choose between them. The first is copy
+Two explanations survive, but we cannot choose between them. The first is copy
 number. The replication enzyme operates continuously with no checkpoint, so
 the number of copies present when a cell divides is not the ≈2.7 loaded at the
-start; reaching 30% over five generations requires roughly five copies per
-plasmid at each division, which is not an extravagant assumption. The second
-is selection, which is the source paper's own reading: a cell that loses the
+start. Reaching 30% over five generations requires roughly five copies per plasmid at each division, and that assumption is not extravagant. The second
+is selection, which is the source paper's own reading. The claim is that a cell that loses the
 membrane channel, the polymerase or the replicase grows poorly and is
 outcompeted, so the surviving population is enriched for complete genomes.
-These are different claims — one about partitioning, one about survivorship —
-and they predict different orderings of which plasmids are lost.
+These are different claims. One is about partitioning, the other about survivorship, and they predict different orderings of which plasmids are lost.
 
 That prediction is testable with the data in hand, and it fails to
 discriminate. Retention correlates with plasmid size (Spearman ρ = −0.79) and
 with functional necessity (point-biserial r = +0.81), both significant at
 n = 7, because the three largest plasmids are also the three the authors
 describe as dispensable. Seven points cannot separate two entangled
-predictors. One detail argues against a purely physical account — the GFP
-plasmid is the smallest at 2.5 kbp and is retained worse than two larger ones —
-but one detail is not a discrimination, and we do not treat it as one.
+predictors. One detail argues against a purely physical account, which is that the GFP
+plasmid is the smallest at 2.5 kbp and is retained worse than two larger ones. However, one detail is not a discrimination, and we do not treat it as one.
 
-The result bears directly on a design claim the source paper makes without
-testing it: that dividing the genome across seven plasmids *limits* the
-influence of stochastic partitioning. For the inheritance of a **complete
-set**, independent partitioning implies the opposite. Each additional plasmid
-is another independent opportunity to fail, and the product of seven
-sub-unity probabilities falls quickly. Splitting a genome may well protect
-against other failure modes — it certainly makes the construct easier to
-modify, which is the authors' stated engineering reason — but for complete-set
-inheritance it is a cost, and 3.2% is the size of that cost under the
-assumption the claim implicitly makes.
+The result bears directly on a design claim the source paper makes without testing it. That claim is that dividing the genome across seven plasmids *limits* the influence of stochastic partitioning. For the inheritance of a **complete
+set**, independent partitioning implies the opposite, and each additional plasmid
+is another independent opportunity to fail. The product of seven sub-unity probabilities falls quickly. Splitting a genome may well protect
+against other failure modes but for complete-set inheritance it is a cost, and 3.2% is the size of that inheritance cost under the
+assumption the claim implicitly makes. However, the split certainly makes the construct easier to
+modify, which is the authors' stated engineering reason.
 
 Two limitations condition everything above, and both come from the source
 paper's own methods. The 30% figure is measured on daughters produced by
 mechanical extrusion through a 2 µm filter, not by the genetically encoded
-division the same paper demonstrates; extrusion was chosen deliberately, for
+division the same paper demonstrates. Also, extrusion was chosen deliberately, for
 uniform daughters and higher yield. Whether forcing division through a pore
 partitions contents more or less evenly than spontaneous scission is unknown,
 and we do not assume either. Separately, the 95 single cells analysed were
 selected from 204 as those with the lowest ribosomal RNA content, to maximise
-the chance that each sample held one cell; the authors identify this as the
+the chance that each sample held one cell, and the authors identify this as the
 only screening step in the work. Whether that selection biases completeness
 upward or downward is likewise unknown.
 
-The experiment that would settle the mechanism is a measurement of per-cell
-plasmid copy number at the moment of division. If copy number at division is
-near the ≈2.7 loaded, selection is doing the work; if it is near five,
-partitioning may be independent after all and nothing further is required. The
-same measurement would also convert this calculation from a bound into a
-prediction.
+The experiment that would settle this is a measurement of per-cell plasmid copy number at the moment of division. If the copy number at division is four or fewer, selection, as the source claims, could be doing the work. If it is near five, partitioning may be independent after all, and cells receive a full set on the strength of multiple copies alone. If that were the case, no correlation would need to be invoked. The same measurement would convert this calculation from a lower bound into a prediction.
 
 ## 5. Limitations
 
@@ -273,5 +242,7 @@ All analysis code is in the repository accompanying this manuscript. `scripts/in
 ## References
 
 1. Gaut NJ, Deich C, Cash B, Hoog T, Engelhart AE, Adamala KP. *A Chemically Defined Synthetic Cell Capable Of Growth And Replication.* bioRxiv 2026.07.01.735724 (2026). doi:10.64898/2026.07.01.735724
+
+2. Olivi L, Berger M, Creyghton RNP, De Franceschi N, Dekker C, Mulder BM, Claassens NJ, ten Wolde PR, van der Oost J. *Towards a synthetic cell cycle.* Nature Communications 12, 4531 (2021). doi:10.1038/s41467-021-24772-8
 
 *Reproduce every number above with `.venv\Scripts\python scripts\independence_check.py` and `scripts\retention_structure.py`.*

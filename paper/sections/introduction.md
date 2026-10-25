@@ -1,7 +1,5 @@
-<!-- DRAFT -->
-
 A cell that divides must give each daughter a complete copy of its genome.
-Bacteria achieve this with dedicated machinery; synthetic cells assembled from
+Bacteria achieve this with dedicated machinery. By contrast, synthetic cells assembled from
 purified components generally have none, and must rely on the contents of the
 parent being distributed by chance. How well that works sets a ceiling on how
 many generations such a system can run.
@@ -30,22 +28,9 @@ but concerns copy number of a single type; natural multipartite genomes, such
 as that of *Vibrio cholerae*, maintain their replicons with active
 segregation systems rather than by chance.
 
-> **>>> ADD ANY PRIOR WORK YOU HAVE READ, IN YOUR OWN WORDS <<<**
->
-> I verified: Olivi L, Berger M, Creyghton R, De Franceschi N, Dekker C,
-> Mulder B, Claassens N, ten Wolde P, van der Oost J. *Towards a synthetic
-> cell cycle.* Nature Communications 12, 4531 (2021).
-> doi:10.1038/s41467-021-24772-8 — checked against Crossref.
->
-> I searched the plasmid-segregation and synthetic-cell literature and found
-> nothing modelling joint retention of several distinct replicons. That search
-> was not exhaustive: no theses, no paywalled work. Write "to our knowledge",
-> never "none exists".
-
 Gaut et al. (2026) report a synthetic cell whose 90 kbp genome is carried on
 seven plasmids, which feeds, grows, replicates its DNA and divides, and which
 sustains five generations with 30% of daughters retaining the complete genome
 despite having no segregation machinery. They also report the per-plasmid
 retention rates. Those two measurements are sufficient, on their own, to test
-whether the plasmids are inherited independently — a test the paper does not
-perform. We perform it here.
+whether the plasmids are inherited independently, a test the paper does not perform. We perform it here.
