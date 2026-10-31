@@ -58,3 +58,19 @@ before posting and wrong before a private read.
 
 Note that making the repository public exposes the full commit history,
 including the author email addresses in it.
+
+## Word versions
+
+`paper/manuscript.docx` and `paper/breeder_guide.docx` are built from the
+Markdown by `scripts/build_docx.js`, which needs the `docx` npm package:
+
+    npm install docx
+    node scripts/build_docx.js paper/manuscript.md paper/manuscript.docx --line-numbers
+    node scripts/build_docx.js paper/breeder_guide.md paper/breeder_guide.docx
+
+The build drops the repo-only notes (the "generated from results/" line and the
+"reproduce every number" line) so they do not reach a reader.
+
+**These .docx files are generated.** Edits made in Word are overwritten the next
+time the script runs. When a collaborator returns an edited Word file, keep it
+under a new name and fold the changes back into `paper/sections/*.md` by hand.
