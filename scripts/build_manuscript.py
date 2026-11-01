@@ -113,6 +113,8 @@ def main():
       "Introduction and Discussion are in `paper/sections/` and are the "
       "author's to write.*")
     w("")
+    w("Jared Samonte")
+    w("")
     w("Independent researcher, Beaumont, TX")
     w("")
 
@@ -293,9 +295,68 @@ def main():
     w(f"The requirement grows slowly because copy number enters as "
       f"(1 - 2^-c) per replicon while replicon count enters as an exponent: "
       f"each added copy halves the chance of losing a given replicon, so "
-      f"roughly log2 N extra copies absorb a genome split N ways. This is "
-      f"the useful general statement, and §3.2 tests it against a system "
-      f"that was actually built.")
+      f"roughly log2 N extra copies absorb a genome split N ways.")
+    w("")
+
+    # A rule quoted at one horizon and one partition symmetry is not a rule,
+    # so both are varied here rather than left to the reader to wonder about.
+    hs = design["horizon_sensitivity"]
+    hg = hs["by_generations"]
+    horizons = sorted(hg, key=int)
+    w("The same slow growth holds along the other axis. Lengthening the "
+      "horizon raises the requirement logarithmically rather than "
+      "proportionally:")
+    w("")
+    w("| Replicons | " + " | ".join(
+        f"{h} generation" + ("" if h == "1" else "s") for h in horizons)
+      + " |")
+    w("|---" * (len(horizons) + 1) + "|")
+    for nr in shown:
+        cells = " | ".join(str(hg[h]["copies_needed"][str(nr)])
+                           for h in horizons)
+        w(f"| {nr} | {cells} |")
+    w("")
+    w(f"Holding half of all lineages complete across {horizons[-1]} "
+      f"generations rather than {design['generations']} costs "
+      f"{hg[horizons[-1]]['copies_needed'][str(n_max)] - hg[str(design['generations'])]['copies_needed'][str(n_max)]} "
+      f"further copies at {n_max} replicons. A design that survives five "
+      "generations is therefore not far from one that survives twenty, "
+      "which is the substantive content of the rule.")
+    w("")
+
+    ns_ = design["noise_sensitivity"]
+    bn = ns_["by_noise"]
+    nus = sorted(bn, key=float)
+    hi_nu = nus[-1]
+    w("**One assumption carries real weight, and it is the one that makes "
+      "the rule optimistic.** Everything above takes each copy to reach a "
+      "given daughter with probability exactly one half. Division need not "
+      "be that even, and a standard lineage simulator draws the partition "
+      "probability from Uniform(0.5 - &nu;/2, 0.5) with &nu; = 0.5 by "
+      "default, so that one daughter is systematically the smaller. "
+      "Repeating the calculation over that distribution:")
+    w("")
+    w("| Replicons | " + " | ".join(
+        ("symmetric" if float(v) == 0 else f"&nu; = {float(v):g}")
+        for v in nus) + " |")
+    w("|---" * (len(nus) + 1) + "|")
+    for nr in shown:
+        cells = " | ".join(str(bn[v]["copies_needed"][str(nr)]) for v in nus)
+        w(f"| {nr} | {cells} |")
+    w("")
+    w(f"At the simulator's default asymmetry the requirement at {n_max} "
+      f"replicons rises from {bn['0.0']['copies_needed'][str(n_max)]} copies "
+      f"to {bn[hi_nu]['copies_needed'][str(n_max)]}, and at "
+      f"{g['n_replicons']} replicons from "
+      f"{bn['0.0']['copies_needed'][str(g['n_replicons'])]} to "
+      f"{bn[hi_nu]['copies_needed'][str(g['n_replicons'])]}. The shape of "
+      "the rule is unchanged and the growth in N is still slow, but the "
+      "level is not robust to it. The symmetric figures should be read as "
+      "the best case, and a design aiming at a target it only just reaches "
+      "under symmetry has no margin.")
+    w("")
+    w("This is the useful general statement, and §3.2 tests it against a "
+      "system that was actually built.")
     w("")
     w("### 3.2 A published system sits above the independent prediction")
     w("")
@@ -437,10 +498,40 @@ def main():
     # ------------------------------------------------------------ limitations
     w("## 5. Limitations")
     w("")
-    w("These are properties of the source measurements, not of the "
-      "calculation, and none of them can be removed by analysis.")
+    w("The first three are assumptions of the model in §3.1 and bound what "
+      "the design rule can be asked to do. The rest are properties of the "
+      "source measurements used in §3.2 to §3.4, and none of those can be "
+      "removed by analysis.")
     w("")
-    w("1. **The division mechanism is mechanical, not genetically encoded.** "
+    w("1. **Partitioning is assumed symmetric, and the rule is optimistic "
+      "in proportion.** The headline figures take each copy to reach a "
+      "given daughter with probability exactly one half. Under the "
+      "asymmetry a standard lineage simulator assumes by default, the "
+      f"copy number required at {g['n_replicons']} replicons rises from "
+      f"{bn['0.0']['copies_needed'][str(g['n_replicons'])]} to "
+      f"{bn[hi_nu]['copies_needed'][str(g['n_replicons'])]}. Real division "
+      "asymmetry is not measured in the source and we do not estimate it.")
+    w("")
+    w("2. **Replicons are assumed to partition independently of one "
+      "another, which §3.2 shows is not true of the one system we can "
+      "check.** The direction is favourable — correlation between "
+      "replicons makes complete sets commoner, so the rule overstates the "
+      "copies required rather than understating them — and in that sense "
+      "the figures are a conservative design target. A system whose "
+      "replicons were *anti*-correlated would break it, and we know of no "
+      "mechanism that would produce that.")
+    w("")
+    w("3. **Copy number is assumed constant across the cycle and equal "
+      "across replicons.** A replicon copied continuously, as &Phi;29 "
+      "copies this genome, has a copy number at division that differs from "
+      "the one it started with, which is the subject of §3.3; the rule "
+      "takes the number at division as given rather than modelling "
+      "replication. Unequal copy number across replicons would change "
+      "which replicon is limiting, and the rule would then be set by the "
+      "scarcest.")
+    w("")
+    w("4. **The division mechanism is mechanical, not genetically "
+      "encoded.** "
       f"The {pct(p_obs)} figure comes from Fig. 3, where daughters are "
       "produced by extrusion through a 2 µm membrane filter (Methods 11), "
       "chosen deliberately to give uniform daughters. Genetically encoded "
@@ -450,22 +541,22 @@ def main():
       "liposome. Whether that is closer to or further from ideal random "
       "partitioning is unknown and is not assumed either way.")
     w("")
-    w(f"2. **The analysed cells were screened.** Of 384 aliquots, 204 had "
+    w(f"5. **The analysed cells were screened.** Of 384 aliquots, 204 had "
       f"detectable 16S rRNA and {n} were selected as those with the "
       "*lowest* 16S abundance, to favour one cell per sample (Methods 23). "
       "The authors identify this as the only screening step in the work. "
       "Whether it biases completeness upward or downward is unknown.")
     w("")
-    w("3. **Six of seven retention values are read from a figure** and carry "
+    w("6. **Six of seven retention values are read from a figure** and carry "
       "roughly ±3 percentage points. The conclusion is insensitive to this: "
       "the independence prediction would have to rise by a factor of nine to "
       "meet the observation, and no plausible re-reading of Fig. 3p moves it "
       "that far.")
     w("")
-    w("4. **Copy number at division is not reported**, and it is the single "
+    w("7. **Copy number at division is not reported**, and it is the single "
       "quantity that decides between the two explanations in §3.3.")
     w("")
-    w("5. **The source is a preprint** and not yet peer reviewed. It also "
+    w("8. **The source is a preprint** and not yet peer reviewed. It also "
       "contains an internal inconsistency — seven plasmids in Results, "
       "Fig. 3o and Table S6, but \"eight\" on p. 5. Table S6 lists seven and "
       "their sizes sum to the stated 90.3 kbp, so seven is used throughout.")

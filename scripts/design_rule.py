@@ -34,6 +34,18 @@ REPLICONS = list(range(1, 13))
 TARGETS = [0.5, 0.9]
 COPY_NUMBERS = [2, 3, 4, 5, 6, 8]
 
+#: A rule quoted at one horizon is not a rule. Five generations is what the
+#: source reports, so it leads, but the requirement has to be shown growing
+#: with the horizon or a reader cannot tell whether it is a general result.
+HORIZONS = [1, 5, 10, 20]
+
+#: `src/inheritance.py` takes the partition probability as 0.5 by default and
+#: warns in its own docstring that bioscrape's splitter does not: it draws
+#: p ~ Uniform(0.5 - nu/2, 0.5) with nu = 0.5, so one daughter is
+#: systematically the smaller. Reporting only the symmetric case would quote
+#: the optimistic end of the model without saying so.
+NOISE_LEVELS = [0.0, 0.25, 0.5]
+
 
 def over_generations(n, c, g=GENERATIONS):
     """A lineage stays complete through g successive divisions."""
@@ -80,6 +92,44 @@ def main():
         }
     res["fraction_of_single_replicon"] = penalty
 
+    # --- how the requirement grows with the horizon ---
+    horizon = {}
+    for g in HORIZONS:
+        per_division = 0.5 ** (1.0 / g)
+        horizon[str(g)] = {
+            "per_division_target": round(per_division, 6),
+            "copies_needed": {
+                str(n): copies_needed_for(per_division, n) for n in REPLICONS
+            },
+        }
+    res["horizon_sensitivity"] = {
+        "target": 0.5,
+        "note": "Copies needed for 50% complete lineages after g generations.",
+        "by_generations": horizon,
+    }
+
+    # --- how much the symmetric-partition assumption is worth ---
+    noise = {}
+    for nu in NOISE_LEVELS:
+        per_division = 0.5 ** (1.0 / GENERATIONS)
+        noise[str(nu)] = {
+            "p_range": [0.5 - nu / 2, 0.5],
+            "copies_needed": {
+                str(n): copies_needed_for(per_division, n, noise=nu)
+                for n in REPLICONS
+            },
+        }
+    res["noise_sensitivity"] = {
+        "target": 0.5,
+        "generations": GENERATIONS,
+        "note": (
+            "Copies needed when the partition probability is not fixed at "
+            "0.5 but drawn from Uniform(0.5 - nu/2, 0.5), as bioscrape's "
+            "LineageVolumeSplitter does. nu = 0.5 is its default."
+        ),
+        "by_noise": noise,
+    }
+
     # --- where the published system sits ---
     res["gaut_2026"] = {
         "n_replicons": 7,
@@ -108,6 +158,23 @@ def main():
     print(f"{'replicons':>10}{hdr}")
     for n in REPLICONS:
         row = "".join(f"{cost[str(c)][str(n)]:>9.3f}" for c in COPY_NUMBERS)
+        print(f"{n:>10}{row}")
+
+    print("\n\nCopies needed for 50% complete, by horizon\n")
+    hdr = "".join(f"{'g=' + str(g):>8}" for g in HORIZONS)
+    print(f"{'replicons':>10}{hdr}")
+    for n in REPLICONS:
+        row = "".join(f"{horizon[str(g)]['copies_needed'][str(n)]:>8}"
+                      for g in HORIZONS)
+        print(f"{n:>10}{row}")
+
+    print("\n\nCopies needed for 50% complete over "
+          f"{GENERATIONS} generations, by partition asymmetry\n")
+    hdr = "".join(f"{'nu=' + str(nu):>10}" for nu in NOISE_LEVELS)
+    print(f"{'replicons':>10}{hdr}")
+    for n in REPLICONS:
+        row = "".join(f"{noise[str(nu)]['copies_needed'][str(n)]:>10}"
+                      for nu in NOISE_LEVELS)
         print(f"{n:>10}{row}")
 
     g = res["gaut_2026"]

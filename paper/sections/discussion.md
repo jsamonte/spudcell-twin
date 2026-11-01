@@ -33,7 +33,7 @@ complete genomes commoner than chance allows.
 
 Two explanations survive, but we cannot choose between them. The first is copy
 number. The replication enzyme operates continuously with no checkpoint, so
-the number of copies present when a cell divides is not the ≈2.7 loaded at the
+the number of copies present when a cell divides is not the 2.6 loaded at the
 start. Reaching 30% over five generations requires roughly five copies per plasmid at each division, and that assumption is not extravagant. The second
 is selection, which is the authors' own reading. The claim is that a cell that loses the
 membrane channel, the polymerase or the replicase grows poorly and is

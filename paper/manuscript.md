@@ -2,6 +2,8 @@
 
 *Methods, Results and Limitations are generated from `results/` by `scripts/build_manuscript.py`; do not edit numbers here. Abstract, Introduction and Discussion are in `paper/sections/` and are the author's to write.*
 
+Jared Samonte
+
 Independent researcher, Beaumont, TX
 
 ## Abstract
@@ -134,7 +136,37 @@ The second and third columns are the result a group designing a synthetic genome
 
 **The cost of splitting is severe in completeness and mild in copy number, and the two readings are easy to confuse.** At a fixed 5 copies, going from one replicon to 12 drops completeness from 85.3% to 14.9%, a factor of 5.7, which reads as prohibitive. Expressed as the copies an experimenter would have to engineer, the same change costs 4 extra copies. The first number is what the product rule does to a fixed design; the second is what it costs to repair one, and only the second is a design decision. A multipartite synthetic genome is therefore not an inheritance problem so much as a copy-number requirement, and a modest one.
 
-The requirement grows slowly because copy number enters as (1 - 2^-c) per replicon while replicon count enters as an exponent: each added copy halves the chance of losing a given replicon, so roughly log2 N extra copies absorb a genome split N ways. This is the useful general statement, and §3.2 tests it against a system that was actually built.
+The requirement grows slowly because copy number enters as (1 - 2^-c) per replicon while replicon count enters as an exponent: each added copy halves the chance of losing a given replicon, so roughly log2 N extra copies absorb a genome split N ways.
+
+The same slow growth holds along the other axis. Lengthening the horizon raises the requirement logarithmically rather than proportionally:
+
+| Replicons | 1 generation | 5 generations | 10 generations | 20 generations |
+|---|---|---|---|---|
+| 1 | 1 | 3 | 4 | 5 |
+| 2 | 2 | 4 | 5 | 6 |
+| 3 | 3 | 5 | 6 | 7 |
+| 5 | 3 | 6 | 7 | 8 |
+| 7 | 4 | 6 | 7 | 8 |
+| 10 | 4 | 7 | 8 | 9 |
+| 12 | 5 | 7 | 8 | 9 |
+
+Holding half of all lineages complete across 20 generations rather than 5 costs 2 further copies at 12 replicons. A design that survives five generations is therefore not far from one that survives twenty, which is the substantive content of the rule.
+
+**One assumption carries real weight, and it is the one that makes the rule optimistic.** Everything above takes each copy to reach a given daughter with probability exactly one half. Division need not be that even, and a standard lineage simulator draws the partition probability from Uniform(0.5 - &nu;/2, 0.5) with &nu; = 0.5 by default, so that one daughter is systematically the smaller. Repeating the calculation over that distribution:
+
+| Replicons | symmetric | &nu; = 0.25 | &nu; = 0.5 |
+|---|---|---|---|
+| 1 | 3 | 4 | 5 |
+| 2 | 4 | 5 | 7 |
+| 3 | 5 | 6 | 8 |
+| 5 | 6 | 7 | 9 |
+| 7 | 6 | 7 | 10 |
+| 10 | 7 | 8 | 11 |
+| 12 | 7 | 8 | 11 |
+
+At the simulator's default asymmetry the requirement at 12 replicons rises from 7 copies to 11, and at 7 replicons from 6 to 10. The shape of the rule is unchanged and the growth in N is still slow, but the level is not robust to it. The symmetric figures should be read as the best case, and a design aiming at a target it only just reaches under symmetry has no margin.
+
+This is the useful general statement, and §3.2 tests it against a system that was actually built.
 
 ### 3.2 A published system sits above the independent prediction
 
@@ -232,7 +264,7 @@ complete genomes commoner than chance allows.
 
 Two explanations survive, but we cannot choose between them. The first is copy
 number. The replication enzyme operates continuously with no checkpoint, so
-the number of copies present when a cell divides is not the ≈2.7 loaded at the
+the number of copies present when a cell divides is not the 2.6 loaded at the
 start. Reaching 30% over five generations requires roughly five copies per plasmid at each division, and that assumption is not extravagant. The second
 is selection, which is the authors' own reading. The claim is that a cell that loses the
 membrane channel, the polymerase or the replicase grows poorly and is
@@ -282,17 +314,23 @@ N the first is usually the cheaper of the two.
 
 ## 5. Limitations
 
-These are properties of the source measurements, not of the calculation, and none of them can be removed by analysis.
+The first three are assumptions of the model in §3.1 and bound what the design rule can be asked to do. The rest are properties of the source measurements used in §3.2 to §3.4, and none of those can be removed by analysis.
 
-1. **The division mechanism is mechanical, not genetically encoded.** The 30.0% figure comes from Fig. 3, where daughters are produced by extrusion through a 2 µm membrane filter (Methods 11), chosen deliberately to give uniform daughters. Genetically encoded division is demonstrated (Fig. 6) but at low yield, and the authors report no per-cell completeness distribution for it. Every number here therefore describes partitioning during extrusion of a grown liposome. Whether that is closer to or further from ideal random partitioning is unknown and is not assumed either way.
+1. **Partitioning is assumed symmetric, and the rule is optimistic in proportion.** The headline figures take each copy to reach a given daughter with probability exactly one half. Under the asymmetry a standard lineage simulator assumes by default, the copy number required at 7 replicons rises from 6 to 10. Real division asymmetry is not measured in the source and we do not estimate it.
 
-2. **The analysed cells were screened.** Of 384 aliquots, 204 had detectable 16S rRNA and 95 were selected as those with the *lowest* 16S abundance, to favour one cell per sample (Methods 23). The authors identify this as the only screening step in the work. Whether it biases completeness upward or downward is unknown.
+2. **Replicons are assumed to partition independently of one another, which §3.2 shows is not true of the one system we can check.** The direction is favourable — correlation between replicons makes complete sets commoner, so the rule overstates the copies required rather than understating them — and in that sense the figures are a conservative design target. A system whose replicons were *anti*-correlated would break it, and we know of no mechanism that would produce that.
 
-3. **Six of seven retention values are read from a figure** and carry roughly ±3 percentage points. The conclusion is insensitive to this: the independence prediction would have to rise by a factor of nine to meet the observation, and no plausible re-reading of Fig. 3p moves it that far.
+3. **Copy number is assumed constant across the cycle and equal across replicons.** A replicon copied continuously, as &Phi;29 copies this genome, has a copy number at division that differs from the one it started with, which is the subject of §3.3; the rule takes the number at division as given rather than modelling replication. Unequal copy number across replicons would change which replicon is limiting, and the rule would then be set by the scarcest.
 
-4. **Copy number at division is not reported**, and it is the single quantity that decides between the two explanations in §3.3.
+4. **The division mechanism is mechanical, not genetically encoded.** The 30.0% figure comes from Fig. 3, where daughters are produced by extrusion through a 2 µm membrane filter (Methods 11), chosen deliberately to give uniform daughters. Genetically encoded division is demonstrated (Fig. 6) but at low yield, and the authors report no per-cell completeness distribution for it. Every number here therefore describes partitioning during extrusion of a grown liposome. Whether that is closer to or further from ideal random partitioning is unknown and is not assumed either way.
 
-5. **The source is a preprint** and not yet peer reviewed. It also contains an internal inconsistency — seven plasmids in Results, Fig. 3o and Table S6, but "eight" on p. 5. Table S6 lists seven and their sizes sum to the stated 90.3 kbp, so seven is used throughout.
+5. **The analysed cells were screened.** Of 384 aliquots, 204 had detectable 16S rRNA and 95 were selected as those with the *lowest* 16S abundance, to favour one cell per sample (Methods 23). The authors identify this as the only screening step in the work. Whether it biases completeness upward or downward is unknown.
+
+6. **Six of seven retention values are read from a figure** and carry roughly ±3 percentage points. The conclusion is insensitive to this: the independence prediction would have to rise by a factor of nine to meet the observation, and no plausible re-reading of Fig. 3p moves it that far.
+
+7. **Copy number at division is not reported**, and it is the single quantity that decides between the two explanations in §3.3.
+
+8. **The source is a preprint** and not yet peer reviewed. It also contains an internal inconsistency — seven plasmids in Results, Fig. 3o and Table S6, but "eight" on p. 5. Table S6 lists seven and their sizes sum to the stated 90.3 kbp, so seven is used throughout.
 
 ## 6. Data and code availability
 
