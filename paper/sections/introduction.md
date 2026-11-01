@@ -1,3 +1,4 @@
+<!-- DRAFT -->
 A cell that divides must give each daughter a complete copy of its genome.
 Bacteria achieve this with dedicated machinery. By contrast, synthetic cells assembled from
 purified components generally have none, and must rely on the contents of the
@@ -28,9 +29,19 @@ but concerns copy number of a single type; natural multipartite genomes, such
 as that of *Vibrio cholerae*, maintain their replicons with active
 segregation systems rather than by chance.
 
-Gaut et al. (2026) report a synthetic cell whose 90 kbp genome is carried on
-seven plasmids, which feeds, grows, replicates its DNA and divides, and which
-sustains five generations with 30% of daughters retaining the complete genome
-despite having no segregation machinery. They also report the per-plasmid
-retention rates. Those two measurements are sufficient, on their own, to test
-whether the plasmids are inherited independently, a test the paper does not perform. We perform it here.
+We quantify it here. From a closed form with no fitted parameters we give the
+per-replicon copy number a genome needs in order to stay complete through a
+chosen number of generations, as a function of how many replicons it has been
+divided into. The answer is more encouraging than the product rule suggests at
+a glance, because copy number enters the expression at the point where it does
+the most work.
+
+We then test that rule against the only built system reporting the
+measurements it requires. Gaut et al. (2026) report a synthetic cell whose
+90 kbp genome is carried on seven plasmids, which feeds, grows, replicates its
+DNA and divides, and which sustains five generations with 30% of daughters
+retaining the complete genome despite having no segregation machinery. They
+also report the per-plasmid retention rates. Those two measurements are
+sufficient, on their own, to test whether the plasmids are inherited
+independently, a test the paper does not perform. We perform it here, and read
+the result back through the design rule.

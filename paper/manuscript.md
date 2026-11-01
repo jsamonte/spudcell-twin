@@ -1,4 +1,4 @@
-# Genome fidelity in a synthetic cell exceeds what independent plasmid partitioning allows
+# The inheritance cost of splitting a synthetic genome across replicons
 
 *Methods, Results and Limitations are generated from `results/` by `scripts/build_manuscript.py`; do not edit numbers here. Abstract, Introduction and Discussion are in `paper/sections/` and are the author's to write.*
 
@@ -6,31 +6,28 @@ Independent researcher, Beaumont, TX
 
 ## Abstract
 
-Synthetic cells assembled from purified components divide without segregation
-machinery, so their contents are distributed to daughters by chance. For a
-single plasmid in many copies this is well understood and tolerable. However, a
-genome carried on several *distinct* plasmids requires every type to be
-inherited at once, and the joint case has not been analysed. Gaut et al.
-(2026) report a synthetic cell whose genome is split across seven plasmids,
-together with both the per-plasmid retention rates after five generations
-(71, 68, 63, 63, 57, 56, 52%) and the fraction of daughters holding the
-complete genome (30%). Those two measurements are sufficient to test
-independence, but we show they are inconsistent with it. If the seven
-plasmids were inherited independently, the probability of a complete set
-would be the product of the individual rates, **3.2%**, but the measured figure
-is **30%**, a factor of **9.4**. Of 95 single cells, independence predicts 3
-complete genomes and 28 were observed (one-sided exact binomial
-p = 1.4 × 10⁻¹⁹). For independence to hold, every plasmid would require a
-retention rate of 84.2%, against a measured mean of 61.4%. The comparison
-uses no fitted parameters. Two explanations remain consistent with the
-published data. Either continuous replication raises copy number at division, or selection removes cells that lose a functionally required plasmid. However, the
-per-plasmid retention ordering cannot distinguish them, correlating with both
-plasmid size and functional necessity at n = 7. We therefore report the
-discrepancy and the measurement that would resolve it, rather than a mechanism. The result also bears on the authors' claim that distributing a
-genome across plasmids limits the influence of stochastic partitioning. For complete-set inheritance, independent partitioning implies the opposite.
+<!-- DRAFT -->
+A synthetic cell that divides without segregation machinery distributes its
+contents to its daughters by chance. For one plasmid in many copies this is
+well understood. A genome split across several *distinct*
+replicons is not, because every replicon must be inherited at once and
+the chance of a complete set is the product of the individual chances. We
+give the design rule that follows. For a lineage to still hold a complete
+genome after five generations of random partitioning, three copies of each
+replicon suffice when the genome sits on one, and seven when it is split
+across twelve; a 90% target runs from six copies to ten. Splitting a genome
+is therefore severe in completeness and mild in copy number, and the two
+readings are easily confused. We then apply the rule to the one built system
+that reports what it needs. Gaut et al. (2026) report seven
+plasmids, the per-plasmid retention after five generations, and 30% of
+daughters complete. Independent partitioning of the measured rates predicts
+**3.2%**, a factor of **9.4** below the observation, and the rule reads that
+observation as about five copies of each plasmid against 2.6 loaded.
+Copy number at division would settle it.
 
 ## 1. Introduction
 
+<!-- DRAFT -->
 A cell that divides must give each daughter a complete copy of its genome.
 Bacteria achieve this with dedicated machinery. By contrast, synthetic cells assembled from
 purified components generally have none, and must rely on the contents of the
@@ -61,12 +58,22 @@ but concerns copy number of a single type; natural multipartite genomes, such
 as that of *Vibrio cholerae*, maintain their replicons with active
 segregation systems rather than by chance.
 
-Gaut et al. (2026) report a synthetic cell whose 90 kbp genome is carried on
-seven plasmids, which feeds, grows, replicates its DNA and divides, and which
-sustains five generations with 30% of daughters retaining the complete genome
-despite having no segregation machinery. They also report the per-plasmid
-retention rates. Those two measurements are sufficient, on their own, to test
-whether the plasmids are inherited independently, a test the paper does not perform. We perform it here.
+We quantify it here. From a closed form with no fitted parameters we give the
+per-replicon copy number a genome needs in order to stay complete through a
+chosen number of generations, as a function of how many replicons it has been
+divided into. The answer is more encouraging than the product rule suggests at
+a glance, because copy number enters the expression at the point where it does
+the most work.
+
+We then test that rule against the only built system reporting the
+measurements it requires. Gaut et al. (2026) report a synthetic cell whose
+90 kbp genome is carried on seven plasmids, which feeds, grows, replicates its
+DNA and divides, and which sustains five generations with 30% of daughters
+retaining the complete genome despite having no segregation machinery. They
+also report the per-plasmid retention rates. Those two measurements are
+sufficient, on their own, to test whether the plasmids are inherited
+independently, a test the paper does not perform. We perform it here, and read
+the result back through the design rule.
 
 ## 2. Methods
 
@@ -101,13 +108,39 @@ The 95 single cells are each complete or not, so the counts carry the test: a on
 
 A cell carrying *c* copies of each plasmid at division misses a given plasmid only if all *c* copies go to the other daughter. Writing *p* for the probability a copy reaches this daughter, the chance of a complete set is (1 - (1 - p)^c)^7. This is implemented in `src/inheritance.py` and is exercised by 21 unit tests. It matters here because &Phi;29 replicates continuously with no checkpoint, so copy number at division is not the 2.6 copies loaded at t = 0.
 
+### 2.5 The general design rule
+
+The same expression answers the design question directly. A lineage stays complete through *G* successive divisions only if it is complete at every one of them, so for a genome on *N* replicons at *c* copies each the probability is (1 - (1 - p)^c)^(NG). Inverting it for *c* gives the smallest copy number that reaches a chosen completeness after *G* generations. We evaluate this for *N* = 1 to 12 replicons at *G* = 5, the number of generations the source reports, and at two completeness targets. The calculation is in `scripts/design_rule.py` and uses the same closed form as §2.4; nothing is fitted.
+
 ## 3. Results
 
-### 3.1 Independent partitioning underpredicts fidelity ninefold
+### 3.1 The inheritance cost of splitting a genome
 
-![](figures/fig1_independence.png)
+![](figures/fig1_design_rule.png)
 
-**Figure 1. Measured genome fidelity exceeds independent partitioning by 9.4×.** (**A**) Per-plasmid retention after 5 generations, from Fig. 3p of the source. The dashed line marks 84.2%, the rate every plasmid would need for independent partitioning to account for the observed complete-genome fraction; no plasmid reaches it. (**B**) The product of the seven rates, 3.2%, against the measured 30.0% (Fig. 3o). Of 95 single cells, independence predicts 3 complete genomes and 28 were observed. No parameter is fitted: panel B is the product of panel A.
+**Figure 1. Splitting a genome across replicons is affordable, but only if copy number rises with it.** (**A**) The smallest per-replicon copy number at which a lineage still holds a complete set after 5 generations of random partitioning, against the number of replicons the genome is divided into, at two completeness targets. (**B**) The same model read as the completeness a given copy number buys. The measured point is the published system, 7 replicons at 30% complete after 5 generations, which implies about 5 copies of each replicon against the 2.6 loaded at t = 0. No parameter is fitted; both panels are the closed form of §2.5.
+
+| Replicons | Copies for 50% complete | Copies for 90% complete | Complete at 5 copies |
+|---|---|---|---|
+| 1 | 3 | 6 | 85.3% |
+| 2 | 4 | 7 | 72.8% |
+| 3 | 5 | 8 | 62.1% |
+| 5 | 6 | 8 | 45.2% |
+| 7 | 6 | 9 | 32.9% |
+| 10 | 7 | 9 | 20.4% |
+| 12 | 7 | 10 | 14.9% |
+
+The second and third columns are the result a group designing a synthetic genome can act on. Holding a complete set in half of all lineages after 5 generations takes 3 copies when the genome sits on one replicon and 7 when it is split across 12; the 90% target runs from 6 to 10 over the same range.
+
+**The cost of splitting is severe in completeness and mild in copy number, and the two readings are easy to confuse.** At a fixed 5 copies, going from one replicon to 12 drops completeness from 85.3% to 14.9%, a factor of 5.7, which reads as prohibitive. Expressed as the copies an experimenter would have to engineer, the same change costs 4 extra copies. The first number is what the product rule does to a fixed design; the second is what it costs to repair one, and only the second is a design decision. A multipartite synthetic genome is therefore not an inheritance problem so much as a copy-number requirement, and a modest one.
+
+The requirement grows slowly because copy number enters as (1 - 2^-c) per replicon while replicon count enters as an exponent: each added copy halves the chance of losing a given replicon, so roughly log2 N extra copies absorb a genome split N ways. This is the useful general statement, and §3.2 tests it against a system that was actually built.
+
+### 3.2 A published system sits above the independent prediction
+
+![](figures/fig2_independence.png)
+
+**Figure 2. Measured genome fidelity exceeds independent partitioning by 9.4×.** (**A**) Per-plasmid retention after 5 generations, from Fig. 3p of the source. The dashed line marks 84.2%, the rate every plasmid would need for independent partitioning to account for the observed complete-genome fraction; no plasmid reaches it. (**B**) The product of the seven rates, 3.2%, against the measured 30.0% (Fig. 3o). Of 95 single cells, independence predicts 3 complete genomes and 28 were observed. No parameter is fitted: panel B is the product of panel A.
 
 | | |
 |---|---|
@@ -124,7 +157,7 @@ For independence to be consistent with the measured 30.0%, every one of the seve
 
 This also tests a claim the source makes but does not quantify: that dividing the genome across seven plasmids *"limits the possible influence of stochastic inequalities in plasmid partitioning"* (SI section 7). For inheriting a **complete set**, independent partitioning implies the opposite — each additional plasmid multiplies in a further chance to fail. The 3.2% figure is that argument stated numerically.
 
-### 3.2 Copy number alone can account for the gap
+### 3.3 Copy number alone can account for the gap
 
 Independent partitioning of *c* copies per plasmid gives:
 
@@ -140,7 +173,7 @@ Surviving 5 independent divisions at 30.0% overall requires 78.6% per division, 
 
 **So the ninefold gap does not by itself demonstrate correlated partitioning.** Continuous replication to roughly twice the loaded copy number would produce the same observation with partitioning that is perfectly independent. The two explanations are not distinguishable from the reported data, and this paper does not claim to distinguish them.
 
-### 3.3 The retention ordering does not separate the explanations
+### 3.4 The retention ordering does not separate the explanations
 
 The two explanations predict different *orderings* of which plasmids are lost. A selective mechanism — the authors' own reading in SI section 7, that losing the channel, the polymerase or the replicase impairs growth — predicts retention tracks functional necessity. A physical mechanism predicts it tracks size or copy number. Both fit:
 
@@ -164,7 +197,30 @@ With n = 7 the two predictors cannot be separated: the three largest plasmids ar
 
 ## 4. Discussion
 
-The calculation above is almost shockingly simple, and that is its point.
+<!-- DRAFT -->
+The design rule is the part of this work that generalises. A synthetic genome
+divided across *N* replicons and partitioned at random needs roughly log2 *N*
+more copies of each replicon than an undivided one would, and that is the
+whole of the inheritance cost. Across the range a synthetic biologist is
+likely to work in, one to twelve replicons, it comes to four extra copies at
+the 50% target and four again at the 90% target. The reason the penalty is
+that small is structural. Replicon count sits in the exponent, but every
+additional copy halves the chance of losing a given replicon, so a geometric
+lever is available against a geometric cost.
+
+Two readings of the same arithmetic are easy to confuse, and the difference
+matters for how a result like this is used. Hold copy number fixed at five
+and split a genome twelve ways, and completeness after five generations falls
+from 85.3% to 14.9%, a factor of 5.7, which reads as a design being
+destroyed. Ask instead what it would take to restore it, and the answer is
+four more copies. The first reading describes what happens to a design left
+alone; the second describes what it costs to repair one, and only the second
+is a decision anybody actually makes. A multipartite synthetic genome is
+better understood as a copy-number requirement than as an inheritance
+problem.
+
+The test against the one system that has been built is almost shockingly
+simple, and that is its point.
 Seven measured retention rates, multiplied together, give 3.2%. The measured
 figure is 30%. Nothing is fitted, nothing is simulated, and no parameter is
 estimated. Therefore, there is no model to attack but only an arithmetic consequence of
@@ -212,6 +268,18 @@ upward or downward is likewise unknown.
 
 The experiment that would settle this is a measurement of per-cell plasmid copy number at the moment of division. If the copy number at division is four or fewer, selection, as Gaut et al. claim, could be doing the work. If it is near five, partitioning may be independent after all, and cells receive a full set on the strength of multiple copies alone. If that were the case, no correlation would need to be invoked. The same measurement would convert this calculation from a lower bound into a prediction.
 
+The rule also says something about where such a design should go next. The
+authors propose consolidating onto a single chromosome, and the calculation
+supports it for a reason worth stating precisely. Consolidation does not make
+inheritance reliable on its own. Even on a single replicon, a lineage holds a
+complete genome through five generations only 23.7% of the time at two copies
+and 51.3% at three, so a consolidated genome at the copy number this system
+loads would still lose most lineages. What consolidation buys is that the
+copy number needed to reach
+any given target stops rising, so the same replication effort goes further.
+Raising copy number and reducing replicon count are substitutes, and at small
+N the first is usually the cheaper of the two.
+
 ## 5. Limitations
 
 These are properties of the source measurements, not of the calculation, and none of them can be removed by analysis.
@@ -222,7 +290,7 @@ These are properties of the source measurements, not of the calculation, and non
 
 3. **Six of seven retention values are read from a figure** and carry roughly ±3 percentage points. The conclusion is insensitive to this: the independence prediction would have to rise by a factor of nine to meet the observation, and no plausible re-reading of Fig. 3p moves it that far.
 
-4. **Copy number at division is not reported**, and it is the single quantity that decides between the two explanations in §3.2.
+4. **Copy number at division is not reported**, and it is the single quantity that decides between the two explanations in §3.3.
 
 5. **The source is a preprint** and not yet peer reviewed. It also contains an internal inconsistency — seven plasmids in Results, Fig. 3o and Table S6, but "eight" on p. 5. Table S6 lists seven and their sizes sum to the stated 90.3 kbp, so seven is used throughout.
 
@@ -230,9 +298,9 @@ These are properties of the source measurements, not of the calculation, and non
 
 No new data were generated. Every input is a published measurement taken from Gaut et al. (2026), cited to the figure, table or methods section it came from in `docs/PARAMETERS.md`.
 
-All analysis code is in the repository accompanying this manuscript. `scripts/independence_check.py` reproduces the headline comparison, `scripts/retention_structure.py` the correlation analysis, and `scripts/make_figures.py` redraws Figure 1 from the same results file the text is generated from, so figure and text cannot disagree. The closed-form inheritance model is in `src/inheritance.py` and is covered by unit tests.
+All analysis code is in the repository accompanying this manuscript. `scripts/design_rule.py` produces the design rule of §3.1, `scripts/independence_check.py` the comparison of §3.2, and `scripts/retention_structure.py` the correlation analysis of §3.4. `scripts/make_design_figure.py` and `scripts/make_figures.py` redraw Figures 1 and 2 from the same results files the text is generated from, so figure and text cannot disagree. The closed-form inheritance model that underlies all of it is in `src/inheritance.py` and is covered by unit tests.
 
-The repository is currently private. It will be made public, and its URL given here, when this manuscript is posted; in the meantime the code is available from the author on request.
+The repository is public at https://github.com/jsamonte/spudcell-twin.
 
 ## References
 

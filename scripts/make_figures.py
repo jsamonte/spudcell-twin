@@ -1,10 +1,12 @@
-"""Draw the paper's one figure, with every number read from results/.
+"""Draw Figure 2, the published case, with every number read from results/.
 
 No value here is typed by hand: the panels are built from
 results/independence_check.json, so re-running the analysis redraws the figure
 and the two can never disagree.
 
-The figure carries the whole argument. Panel A shows the seven measured
+Figure 1 is the general design rule (scripts/make_design_figure.py);
+this one is the worked example that tests it against a real system.
+Panel A shows the seven measured
 per-plasmid retention rates against the rate that independent partitioning
 would require; every bar falls short. Panel B multiplies those seven together
 and sets the product beside what was actually measured.
@@ -135,7 +137,7 @@ def main():
     fig.tight_layout(w_pad=2.4)
     FIGURES.mkdir(parents=True, exist_ok=True)
     for ext in ("svg", "png"):
-        out = FIGURES / f"fig1_independence.{ext}"
+        out = FIGURES / f"fig2_independence.{ext}"
         fig.savefig(out, dpi=300, bbox_inches="tight")
         print(f"  wrote {out.relative_to(ROOT)}")
     plt.close(fig)

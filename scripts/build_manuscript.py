@@ -16,6 +16,10 @@ ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "results"
 PAPER = ROOT / "paper"
 
+#: Public as of 2026-10-31. Printed in the availability statement, so a
+#: reader can run every number in the paper.
+REPO_URL = "https://github.com/jsamonte/spudcell-twin"
+
 CITE = ("Gaut NJ, Deich C, Cash B, Hoog T, Engelhart AE, Adamala KP. "
         "*A Chemically Defined Synthetic Cell Capable Of Growth And "
         "Replication.* bioRxiv 2026.07.01.735724 (2026). "
@@ -86,8 +90,11 @@ def prose(name, fallback):
 def main():
     ind = load("independence_check.json")
     struct = load("retention_structure.json")
+    design = load("design_rule.json")
     if not ind:
         sys.exit("run scripts/independence_check.py first")
+    if not design:
+        sys.exit("run scripts/design_rule.py first")
 
     pct = lambda x: f"{x:.1%}"                                    # noqa: E731
     p_ind = ind["p_all_seven_if_independent"]
@@ -98,8 +105,8 @@ def main():
     L = []
     w = L.append
 
-    w("# Genome fidelity in a synthetic cell exceeds what independent "
-      "plasmid partitioning allows")
+    w("# The inheritance cost of splitting a synthetic genome across "
+      "replicons")
     w("")
     w("*Methods, Results and Limitations are generated from `results/` by "
       "`scripts/build_manuscript.py`; do not edit numbers here. Abstract, "
@@ -196,21 +203,111 @@ def main():
       "copy number at division is not the "
       f"{ind['copies_at_load']:.1f} copies loaded at t = 0.")
     w("")
+    w("### 2.5 The general design rule")
+    w("")
+    w("The same expression answers the design question directly. A lineage "
+      "stays complete through *G* successive divisions only if it is "
+      "complete at every one of them, so for a genome on *N* replicons at "
+      "*c* copies each the probability is (1 - (1 - p)^c)^(NG). Inverting "
+      "it for *c* gives the smallest copy number that reaches a chosen "
+      f"completeness after *G* generations. We evaluate this for *N* = 1 to "
+      f"{max(int(k) for k in design['design_rule']['0.5']['copies_needed'])} "
+      f"replicons at *G* = {design['generations']}, the number of "
+      "generations the source reports, and at two completeness targets. The "
+      "calculation is in `scripts/design_rule.py` and uses the same "
+      "closed form as §2.4; nothing is fitted.")
+    w("")
 
     # ----------------------------------------------------------------- results
     w("## 3. Results")
     w("")
-    w("### 3.1 Independent partitioning underpredicts fidelity ninefold")
+
+    # The general result leads. The published system is the worked example
+    # that follows it, not the subject of the paper.
+    rule = design["design_rule"]
+    cost = design["completeness_by_replicons"]
+    g = design["gaut_2026"]
+    gens_d = design["generations"]
+    ns_all = sorted(int(k) for k in rule["0.5"]["copies_needed"])
+    n_max = ns_all[-1]
+    shown = [n for n in (1, 2, 3, 5, 7, 10, n_max) if n in ns_all]
+
+    need50 = lambda n: rule["0.5"]["copies_needed"][str(n)]       # noqa: E731
+    need90 = lambda n: rule["0.9"]["copies_needed"][str(n)]       # noqa: E731
+
+    w("### 3.1 The inheritance cost of splitting a genome")
+    w("")
+
+    figure1 = PAPER / "figures" / "fig1_design_rule.png"
+    if figure1.exists():
+        w("![](figures/fig1_design_rule.png)")
+        w("")
+        w(f"**Figure 1. Splitting a genome across replicons is affordable, "
+          f"but only if copy number rises with it.** (**A**) The smallest "
+          f"per-replicon copy number at which a lineage still holds a "
+          f"complete set after {gens_d} generations of random partitioning, "
+          f"against the number of replicons the genome is divided into, at "
+          f"two completeness targets. (**B**) The same model read as the "
+          f"completeness a given copy number buys. The measured point is the "
+          f"published system, {g['n_replicons']} replicons at "
+          f"{g['observed_complete_after_5_generations']:.0%} complete after "
+          f"{gens_d} generations, which implies about {g['copies_implied']} "
+          f"copies of each replicon against the "
+          f"{g['copies_loaded_at_t0']} loaded at t = 0. No parameter is "
+          f"fitted; both panels are the closed form of §2.5.")
+        w("")
+    else:
+        w("*(Figure 1 missing — run `scripts/make_design_figure.py`.)*")
+        w("")
+
+    w(f"| Replicons | Copies for {rule['0.5']['overall_target']:.0%} "
+      f"complete | Copies for {rule['0.9']['overall_target']:.0%} complete | "
+      f"Complete at 5 copies |")
+    w("|---|---|---|---|")
+    # Not `n`: that name holds the single-cell count used further down, and
+    # a loop variable here silently rewrote it to the last replicon count.
+    for nr in shown:
+        w(f"| {nr} | {need50(nr)} | {need90(nr)} | "
+          f"{cost['5'][str(nr)]:.1%} |")
+    w("")
+    w(f"The second and third columns are the result a group designing a "
+      f"synthetic genome can act on. Holding a complete set in half of all "
+      f"lineages after {gens_d} generations takes {need50(1)} copies when "
+      f"the genome sits on one replicon and {need50(n_max)} when it is split "
+      f"across {n_max}; the {rule['0.9']['overall_target']:.0%} target runs "
+      f"from {need90(1)} to {need90(n_max)} over the same range.")
+    w("")
+    w("**The cost of splitting is severe in completeness and mild in copy "
+      "number, and the two readings are easy to confuse.** At a fixed "
+      f"5 copies, going from one replicon to {n_max} drops completeness from "
+      f"{cost['5']['1']:.1%} to {cost['5'][str(n_max)]:.1%}, a factor of "
+      f"{cost['5']['1'] / cost['5'][str(n_max)]:.1f}, which reads as "
+      f"prohibitive. Expressed as the copies an experimenter would have to "
+      f"engineer, the same change costs "
+      f"{need50(n_max) - need50(1)} extra copies. The first number is what "
+      "the product rule does to a fixed design; the second is what it costs "
+      "to repair one, and only the second is a design decision. A "
+      "multipartite synthetic genome is therefore not an inheritance "
+      "problem so much as a copy-number requirement, and a modest one.")
+    w("")
+    w(f"The requirement grows slowly because copy number enters as "
+      f"(1 - 2^-c) per replicon while replicon count enters as an exponent: "
+      f"each added copy halves the chance of losing a given replicon, so "
+      f"roughly log2 N extra copies absorb a genome split N ways. This is "
+      f"the useful general statement, and §3.2 tests it against a system "
+      f"that was actually built.")
+    w("")
+    w("### 3.2 A published system sits above the independent prediction")
     w("")
 
     # The figure carries the whole argument, so it leads the results rather
     # than trailing them. Drawn by scripts/make_figures.py from the same
     # results file these numbers come from, so the two cannot disagree.
-    figure = PAPER / "figures" / "fig1_independence.png"
+    figure = PAPER / "figures" / "fig2_independence.png"
     if figure.exists():
-        w("![](figures/fig1_independence.png)")
+        w("![](figures/fig2_independence.png)")
         w("")
-        w(f"**Figure 1. Measured genome fidelity exceeds independent "
+        w(f"**Figure 2. Measured genome fidelity exceeds independent "
           f"partitioning by {ind['ratio_observed_over_independent']:.1f}×.** "
           f"(**A**) Per-plasmid retention after {gens} generations, from "
           f"Fig. 3p of the source. The dashed line marks "
@@ -225,7 +322,7 @@ def main():
           f"is fitted: panel B is the product of panel A.")
         w("")
     else:
-        w("*(Figure 1 missing — run `scripts/make_figures.py`.)*")
+        w("*(Figure 2 missing — run `scripts/make_figures.py`.)*")
         w("")
 
     w("| | |")
@@ -259,7 +356,7 @@ def main():
       "multiplies in a further chance to fail. The "
       f"{pct(p_ind)} figure is that argument stated numerically.")
     w("")
-    w("### 3.2 Copy number alone can account for the gap")
+    w("### 3.3 Copy number alone can account for the gap")
     w("")
     w("Independent partitioning of *c* copies per plasmid gives:")
     w("")
@@ -286,7 +383,7 @@ def main():
     w("")
 
     if struct:
-        w("### 3.3 The retention ordering does not separate the explanations")
+        w("### 3.4 The retention ordering does not separate the explanations")
         w("")
         w("The two explanations predict different *orderings* of which "
           "plasmids are lost. A selective mechanism — the authors' own "
@@ -366,7 +463,7 @@ def main():
       "that far.")
     w("")
     w("4. **Copy number at division is not reported**, and it is the single "
-      "quantity that decides between the two explanations in §3.2.")
+      "quantity that decides between the two explanations in §3.3.")
     w("")
     w("5. **The source is a preprint** and not yet peer reviewed. It also "
       "contains an internal inconsistency — seven plasmids in Results, "
@@ -382,22 +479,16 @@ def main():
       "section it came from in `docs/PARAMETERS.md`.")
     w("")
     w("All analysis code is in the repository accompanying this manuscript. "
-      "`scripts/independence_check.py` reproduces the headline comparison, "
-      "`scripts/retention_structure.py` the correlation analysis, and "
-      "`scripts/make_figures.py` redraws Figure 1 from the same results file "
-      "the text is generated from, so figure and text cannot disagree. The "
-      "closed-form inheritance model is in `src/inheritance.py` and is "
-      "covered by unit tests.")
+      "`scripts/design_rule.py` produces the design rule of §3.1, "
+      "`scripts/independence_check.py` the comparison of §3.2, and "
+      "`scripts/retention_structure.py` the correlation analysis of §3.4. "
+      "`scripts/make_design_figure.py` and `scripts/make_figures.py` redraw "
+      "Figures 1 and 2 from the same results files the text is generated "
+      "from, so figure and text cannot disagree. The closed-form "
+      "inheritance model that underlies all of it is in `src/inheritance.py` "
+      "and is covered by unit tests.")
     w("")
-    # The repository is private while the manuscript circulates privately, so
-    # this says so rather than printing a URL that would not resolve. The
-    # reminder to make it public and paste the URL lives in paper/README.md,
-    # where it cannot block build_pdf.py: a >>> instruction in the text stops
-    # the PDF rendering, which is right before posting and wrong before a
-    # private read.
-    w("The repository is currently private. It will be made public, and its "
-      "URL given here, when this manuscript is posted; in the meantime the "
-      "code is available from the author on request.")
+    w(f"The repository is public at {REPO_URL}.")
     w("")
 
     # ------------------------------------------------------------- references

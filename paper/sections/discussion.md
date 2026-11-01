@@ -1,4 +1,27 @@
-The calculation above is almost shockingly simple, and that is its point.
+<!-- DRAFT -->
+The design rule is the part of this work that generalises. A synthetic genome
+divided across *N* replicons and partitioned at random needs roughly log2 *N*
+more copies of each replicon than an undivided one would, and that is the
+whole of the inheritance cost. Across the range a synthetic biologist is
+likely to work in, one to twelve replicons, it comes to four extra copies at
+the 50% target and four again at the 90% target. The reason the penalty is
+that small is structural. Replicon count sits in the exponent, but every
+additional copy halves the chance of losing a given replicon, so a geometric
+lever is available against a geometric cost.
+
+Two readings of the same arithmetic are easy to confuse, and the difference
+matters for how a result like this is used. Hold copy number fixed at five
+and split a genome twelve ways, and completeness after five generations falls
+from 85.3% to 14.9%, a factor of 5.7, which reads as a design being
+destroyed. Ask instead what it would take to restore it, and the answer is
+four more copies. The first reading describes what happens to a design left
+alone; the second describes what it costs to repair one, and only the second
+is a decision anybody actually makes. A multipartite synthetic genome is
+better understood as a copy-number requirement than as an inheritance
+problem.
+
+The test against the one system that has been built is almost shockingly
+simple, and that is its point.
 Seven measured retention rates, multiplied together, give 3.2%. The measured
 figure is 30%. Nothing is fitted, nothing is simulated, and no parameter is
 estimated. Therefore, there is no model to attack but only an arithmetic consequence of
@@ -45,3 +68,15 @@ only screening step in the work. Whether that selection biases completeness
 upward or downward is likewise unknown.
 
 The experiment that would settle this is a measurement of per-cell plasmid copy number at the moment of division. If the copy number at division is four or fewer, selection, as Gaut et al. claim, could be doing the work. If it is near five, partitioning may be independent after all, and cells receive a full set on the strength of multiple copies alone. If that were the case, no correlation would need to be invoked. The same measurement would convert this calculation from a lower bound into a prediction.
+
+The rule also says something about where such a design should go next. The
+authors propose consolidating onto a single chromosome, and the calculation
+supports it for a reason worth stating precisely. Consolidation does not make
+inheritance reliable on its own. Even on a single replicon, a lineage holds a
+complete genome through five generations only 23.7% of the time at two copies
+and 51.3% at three, so a consolidated genome at the copy number this system
+loads would still lose most lineages. What consolidation buys is that the
+copy number needed to reach
+any given target stops rising, so the same replication effort goes further.
+Raising copy number and reducing replicon count are substitutes, and at small
+N the first is usually the cheaper of the two.
