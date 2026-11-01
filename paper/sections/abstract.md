@@ -1,18 +1,19 @@
 <!-- DRAFT -->
-A synthetic cell that divides without segregation machinery distributes its
-contents to its daughters by chance. For one plasmid in many copies this is
-well understood. A genome split across several *distinct*
-replicons is not, because every replicon must be inherited at once and
-the chance of a complete set is the product of the individual chances. We
-give the design rule that follows. For a lineage to still hold a complete
-genome after five generations of random partitioning, three copies of each
-replicon suffice when the genome sits on one, and seven when it is split
-across twelve; a 90% target runs from six copies to ten. Splitting a genome
-is therefore severe in completeness and mild in copy number, and the two
-readings are easily confused. We then apply the rule to the one built system
-that reports what it needs. Gaut et al. (2026) report seven
-plasmids, the per-plasmid retention after five generations, and 30% of
-daughters complete. Independent partitioning of the measured rates predicts
-**3.2%**, a factor of **9.4** below the observation, and the rule reads that
-observation as about five copies of each plasmid against 2.6 loaded.
-Copy number at division would settle it.
+Synthetic cells assembled from purified components divide without segregation
+machinery, so their contents are distributed to daughters by chance. For a
+single plasmid in many copies this is well understood. However,
+a genome carried on several *distinct* plasmids requires every type to be
+inherited at once, and the joint case has not been analysed. We analyse it.
+For a lineage to still hold a complete genome after five generations, three
+copies of each replicon suffice when the genome sits on one replicon and seven
+when it is split across twelve, so splitting is severe in
+completeness and mild in copies. Gaut et al. (2026)
+report a synthetic cell whose genome is split across seven plasmids, together
+with the per-plasmid retention rates after five generations and the fraction
+of daughters holding the complete genome (30%). If the seven were inherited
+independently the probability of a complete set would be the product of the
+individual rates, **3.2%**, a factor of **9.4** below the measured figure. The
+comparison uses no fitted parameters. Our rule reads that as about
+five copies of each plasmid against 2.6 loaded. We therefore report the
+discrepancy and the measurement that would resolve it, rather than a
+mechanism.

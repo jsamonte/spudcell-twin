@@ -25,6 +25,15 @@ CITE = ("Gaut NJ, Deich C, Cash B, Hoog T, Engelhart AE, Adamala KP. "
         "Replication.* bioRxiv 2026.07.01.735724 (2026). "
         "doi:10.64898/2026.07.01.735724")
 
+#: Cited in the introduction for the point that natural multipartite genomes
+#: are maintained by active partitioning rather than by chance. Verified
+#: against Crossref 2026-10-31; author list, journal, volume and article
+#: number are as Crossref returned them, not recalled.
+DU = ("Du W-L, Dubarry N, Passot FM, Kamgoue A, Murray H, Lane D, Pasta F. "
+      "*Orderly Replication and Segregation of the Four Replicons of "
+      "Burkholderia cenocepacia J2315.* PLOS Genetics 12(7), e1006172 "
+      "(2016). doi:10.1371/journal.pgen.1006172")
+
 #: Cited in the introduction for the classical single-plasmid result - random
 #: partitioning suffices when the cargo is many small identical molecules.
 #: Verified against Crossref 2026-10-21; author list and article number are as
@@ -395,7 +404,7 @@ def main():
     w(f"| Complete cells of {n}: predicted / observed | "
       f"{ind['expected_complete_cells']:.1f} / "
       f"{ind['observed_complete_cells']} |")
-    w(f"| Binomial test | **p = {ind['binomial_p_value']:.2e}** |")
+    w(f"| Binomial test | **p = {ind['binomial_p_value']:.0e}** |")
     w(f"| Observed rate (95% CI) | {pct(ind['observed_rate'])} "
       f"({pct(ind['observed_rate_ci95'][0])}–"
       f"{pct(ind['observed_rate_ci95'][1])}) |")
@@ -408,6 +417,19 @@ def main():
       f"a measured mean of {pct(ind['mean_retention'])} and a measured "
       f"maximum of {pct(max(ind['retention'].values()))}. No reading of "
       "Fig. 3p supports that.")
+    w("")
+    # Six of the seven inputs are read off a bar chart, so a p-value quoted
+    # to three figures is more precise than the data. The envelope is the
+    # honest number.
+    w(f"Because six of the seven rates are read from a bar chart, the "
+      f"comparison is repeated at the reading most favourable to "
+      f"independence, with every read value raised by "
+      f"{ind['figure_read_tolerance']:.0%}. The independence prediction then "
+      f"rises to {pct(ind['p_all_seven_if_independent_favourable'])}, the "
+      f"ratio falls to {ind['ratio_favourable']:.1f}&times;, and the "
+      f"binomial p remains below 10^-15. The conclusion does not "
+      f"depend on how the chart is read, and the precise p-value should not "
+      f"be taken more seriously than its inputs allow.")
     w("")
     w("This also tests a claim the source makes but does not quantify: that "
       "dividing the genome across seven plasmids *\"limits the possible "
@@ -583,11 +605,33 @@ def main():
     w("")
 
     # ------------------------------------------------------------- references
+    # ------------------------------------------------------ declarations
+    w("## 7. Declarations")
+    w("")
+    w("**Funding.** This work received no funding.")
+    w("")
+    w("**Competing interests.** The author declares no competing interests.")
+    w("")
+    w("**Use of AI and AI-assisted technologies.** "
+      "Anthropic's Claude was used throughout this work, under the "
+      "author's direction, to write and debug the analysis code, to draft "
+      "and edit prose, and to check the manuscript against the results "
+      "files. Every numerical value in this paper is written by "
+      "`scripts/build_manuscript.py` from the files in `results/`, which "
+      "the scripts named in §6 regenerate from the published "
+      "measurements in `docs/PARAMETERS.md`, so no number here was "
+      "produced by a language model. The author chose the question, "
+      "identified the comparison and the parameters it needs, verified the "
+      "results and takes responsibility for the content.")
+    w("")
+
     w("## References")
     w("")
     w(f"1. {CITE}")
     w("")
     w(f"2. {OLIVI}")
+    w("")
+    w(f"3. {DU}")
     w("")
     w("*Reproduce every number above with "
       "`.venv\\Scripts\\python scripts\\independence_check.py` and "

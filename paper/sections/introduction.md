@@ -24,10 +24,15 @@ therefore carries an inheritance cost, and the size of that cost has not been
 quantified.
 
 We searched for prior treatments of joint retention across multiple distinct
-replicons and found none. The literature on plasmid segregation is extensive
-but concerns copy number of a single type; natural multipartite genomes, such
-as that of *Vibrio cholerae*, maintain their replicons with active
-segregation systems rather than by chance.
+replicons and found none. Searches combining plasmid segregation, random and
+stochastic partitioning, multipartite genomes and complete-set inheritance,
+run in October 2026, returned two bodies of work with no overlap between them.
+The literature on plasmid segregation is extensive but concerns copy number of
+a single type. The literature on natural multipartite genomes concerns
+replicons kept by active partitioning rather than by chance, each with a Par
+system that positions only its own replicon (Du et al., 2016). Neither gives a
+closed form for the probability that a daughter inherits at least one copy of
+every replicon type.
 
 We quantify it here. From a closed form with no fitted parameters we give the
 per-replicon copy number a genome needs in order to stay complete through a

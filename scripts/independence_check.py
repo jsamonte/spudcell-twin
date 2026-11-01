@@ -81,13 +81,29 @@ def main():
     # One-sided, because the question is whether fidelity EXCEEDS what chance
     # allows. The interval is taken two-sided, so it reports the uncertainty on
     # the observed rate rather than a bound implied by the test direction.
+    # Six of the seven rates are read off a bar chart. Pushing every read
+    # value to the top of its +/-3 point band is the reading most favourable
+    # to independence, so the p-value there is the one worth quoting.
+    FIGURE_READ_TOLERANCE = 0.03
+    STATED_NUMERICALLY = {"aHL"}          # SI section 6
+    product_hi = 1.0
+    for name, p in RETENTION.items():
+        product_hi *= p if name in STATED_NUMERICALLY else min(
+            1.0, p + FIGURE_READ_TOLERANCE)
+
     test = stats.binomtest(observed_n, N_CELLS, product, alternative="greater")
+    test_hi = stats.binomtest(observed_n, N_CELLS, product_hi,
+                              alternative="greater")
     ci = stats.binomtest(observed_n, N_CELLS, product).proportion_ci(
         confidence_level=0.95)
     print(f"\n  binomial test, {observed_n}/{N_CELLS} against p={product:.4f}:")
     print(f"    p-value = {test.pvalue:.3e}")
     print(f"    observed rate {observed_n / N_CELLS:.1%} "
           f"(95% CI {ci.low:.1%}-{ci.high:.1%}) vs predicted {product:.1%}")
+    print(f"\n  most favourable reading of Fig. 3p (+{FIGURE_READ_TOLERANCE:.0%} "
+          f"on each read value):")
+    print(f"    independence predicts {product_hi:.1%}, ratio "
+          f"{OBSERVED_COMPLETE / product_hi:.1f}x, p = {test_hi.pvalue:.1e}")
 
     # One physical explanation needs no correlation at all: more than one copy
     # of each plasmid at the moment of division. Phi29 replicates continuously
@@ -135,6 +151,10 @@ def main():
         "expected_complete_cells": round(expected, 2),
         "observed_complete_cells": observed_n,
         "binomial_p_value": float(test.pvalue),
+        "figure_read_tolerance": FIGURE_READ_TOLERANCE,
+        "p_all_seven_if_independent_favourable": round(product_hi, 6),
+        "ratio_favourable": round(OBSERVED_COMPLETE / product_hi, 3),
+        "binomial_p_value_favourable": float(test_hi.pvalue),
         "observed_rate": round(observed_n / N_CELLS, 4),
         "observed_rate_ci95": [round(ci.low, 4), round(ci.high, 4)],
         "copies_at_load": COPIES_AT_LOAD,

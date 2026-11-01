@@ -20,6 +20,10 @@
   "expected_complete_cells": 3.02,
   "observed_complete_cells": 28,
   "binomial_p_value": 1.355275928063125e-19,
+  "figure_read_tolerance": 0.03,
+  "p_all_seven_if_independent_favourable": 0.042753,
+  "ratio_favourable": 7.017,
+  "binomial_p_value_favourable": 2.5751936566439883e-16,
   "observed_rate": 0.2947,
   "observed_rate_ci95": [
     0.2056,
