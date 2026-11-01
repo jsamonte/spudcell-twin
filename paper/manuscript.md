@@ -8,7 +8,6 @@ Independent researcher, Beaumont, TX
 
 ## Abstract
 
-<!-- DRAFT -->
 Synthetic cells assembled from purified components divide without segregation
 machinery, so their contents are distributed to daughters by chance. For a
 single plasmid in many copies this is well understood. However,
@@ -30,7 +29,6 @@ mechanism.
 
 ## 1. Introduction
 
-<!-- DRAFT -->
 A cell that divides must give each daughter a complete copy of its genome.
 Bacteria achieve this with dedicated machinery. By contrast, synthetic cells assembled from
 purified components generally have none, and must rely on the contents of the
@@ -237,7 +235,6 @@ With n = 7 the two predictors cannot be separated: the three largest plasmids ar
 
 ## 4. Discussion
 
-<!-- DRAFT -->
 The part of this that generalises is the design rule, and it is worth stating
 before the particular case. A genome divided across *N* replicons and
 partitioned at random needs roughly log2 *N* more copies of each replicon than

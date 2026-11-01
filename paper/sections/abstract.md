@@ -1,4 +1,3 @@
-<!-- DRAFT -->
 Synthetic cells assembled from purified components divide without segregation
 machinery, so their contents are distributed to daughters by chance. For a
 single plasmid in many copies this is well understood. However,

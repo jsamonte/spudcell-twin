@@ -1,4 +1,3 @@
-<!-- DRAFT -->
 A cell that divides must give each daughter a complete copy of its genome.
 Bacteria achieve this with dedicated machinery. By contrast, synthetic cells assembled from
 purified components generally have none, and must rely on the contents of the

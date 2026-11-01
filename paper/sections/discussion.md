@@ -1,4 +1,3 @@
-<!-- DRAFT -->
 The part of this that generalises is the design rule, and it is worth stating
 before the particular case. A genome divided across *N* replicons and
 partitioned at random needs roughly log2 *N* more copies of each replicon than
